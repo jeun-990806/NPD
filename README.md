@@ -31,3 +31,14 @@ Breakdowns:
  - BMP write time: 0.0100065s
  - Total offload times: 1
 ```
+
+## Citation
+```
+@conference{npd_ipdps25,
+  title   = {{Enhanced JPEG Decoding using PIM Architectures with Parallel MCU Processing}},
+  author  = {Jieun Kim and Dukyun Nam},
+  booktitle = {Proceedings of the IEEE International Parallel & Distributed Processing Symposium},
+  year    = {2025},
+  month   = {June}
+}
+```
