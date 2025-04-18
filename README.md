@@ -1,23 +1,33 @@
 # NPD (Novel PIM Decoder)
-## Build
+**NPD(Novel PIM Decoder)** is a JPEG decoder designed to runs on PIM-integrated systems. It can decode massive, high-resolution JPEG images by flexibly utilizing thousands of DPU cores.
+
+## Building
+Before building this project, the following software must be installed on your system:
+- UPMEM SDK
+- `cmake`, `make`
+- GCC compiler
+
+A Makefile is provided, and executables will be created in the `bin/` directory. Use the following commands to build the project:
+
 ```
 git clone https://github.com/jeun-990806/NPD.git
 cd NPD
 make
 ```
 
-### Modify the Makefile
-* Line 1: `NUM_TASKLETS` — Set the number of tasklets.
-* Line 2: `MAX_MCU_PER_DPU` — Set the number of MCUs processed by each DPU.
+### Variables in Makefile
+There are configurable options available before building, defined as variables in the Makefile. You can adjust the number of hardware threads and how NPD distributes image data by modifying the Makefile.
+* `NUM_TASKLETS` — Set the number of tasklets.
+* `MAX_MCU_PER_DPU` — Set the number of MCUs processed by each DPU.
 
-## Convert JPEG Images to BMP
+## Usage
+### Convert JPEG Images to BMP
+NPD takes one or more JPEG file paths as command-line arguments. It creates BMP files from the input JPEGs, and the output files are generated in the same directories as the originals.
 ```
 ./bin/decoder <jpeg_image_1> ...
 ```
-* Output BMP files will be generated in the same directory as the input JPEG images.
-* The output file names will follow the format of the input files, with .bmp extensions.
 
-## Performance Profiling
+### Performance Profiling
 After execution, a performance profile will be printed to the console. Example:
 
 ```
@@ -31,6 +41,26 @@ Breakdowns:
  - BMP write time: 0.0100065s
  - Total offload times: 1
 ```
+
+## Design
+![archtecture](./architecture.png)
+
+NPD utilizes two threads and a single queue to efficiently distribute JPEG image data and decoding tasks. The image data is divided into MCUs (Minimum Coded Units), which are processed in parallel across multiple DPUs. This allows high-resolution image decoding to be offloaded despite the limited local DRAM capacity of each DPU. Decoding tasks are categorized based on their characteristics into CPU-suitable tasks (e.g., metadata parsing, Huffman decoding) and parallelizable tasks. The latter are offloaded to the DPUs, reducing overall overhead and enabling efficient decoding performance.
+
+## Performance Evaluation
+
+We evaluate the NPD using two datasets, the LR(Low-Resolution) and HR(High-Resolution). The LR dataset includes randomly selected 2,500 images of [ILSVRC2012](https://www.image-net.org/challenges/LSVRC/2012/) and the HR dataset is the subset of [Clothing dataset](https://www.kaggle.com/datasets/agrigorev/clothing-dataset-full) which can be decoded by baselines. 
+
+<p>
+  <img src="./evaluation_comparison1.png" style="width: 49%; display: inline-block;">
+  <img src="./evaluation_comparison2.png" style="width: 49%; display: inline-block;">
+</p>
+
+We compare NPD with an existing PIM-based JPEG decoder. Execution time is reduced in all cases, with a particularly significant reduction observed when decoding a large number of small images.
+
+<img src="./evaluation_comparison3.png" style="width: 60%">
+
+We also compare NPD with other existing JPEG decoders. (**Note**: nvJPEG was tested on a GPU without hardware decoding support, and the implementation used was from NVIDIA’s [CUDALibrarySamples](https://github.com/NVIDIA/CUDALibrarySamples).) When decoding a large number of small images, both NPD and nvJPEG outperform ImageMagick, whereas ImageMagick achieves better performance when decoding fewer large images.
 
 ## Citation
 ```
