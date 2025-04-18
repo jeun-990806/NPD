@@ -48,8 +48,8 @@ Breakdowns:
 NPD utilizes two threads and a single queue to efficiently distribute JPEG image data and decoding tasks. The image data is divided into MCUs (Minimum Coded Units), which are processed in parallel across multiple DPUs. This allows high-resolution image decoding to be offloaded despite the limited local DRAM capacity of each DPU. Decoding tasks are categorized based on their characteristics into CPU-suitable tasks (e.g., metadata parsing, Huffman decoding) and parallelizable tasks. The latter are offloaded to the DPUs, reducing overall overhead and enabling efficient decoding performance.
 
 ## Performance Evaluation
-
-We evaluate the NPD using two datasets, the LR(Low-Resolution) and HR(High-Resolution). The LR dataset includes randomly selected 2,500 images of [ILSVRC2012](https://www.image-net.org/challenges/LSVRC/2012/) and the HR dataset is the subset of [Clothing dataset](https://www.kaggle.com/datasets/agrigorev/clothing-dataset-full) which can be decoded by baselines. 
+We evaluate NPD using two datasets: LR (Low-Resolution) and HR (High-Resolution).
+The LR dataset consists of 2,500 randomly selected images from [ILSVRC2012](https://www.image-net.org/challenges/LSVRC/2012/), while the HR dataset is a subset of the [Clothing dataset](https://www.kaggle.com/datasets/agrigorev/clothing-dataset-full) that can be decoded by all baselines.
 
 <p>
   <img src="images/evaluation_comparison1.png" style="width: 49%; display: inline-block;">
