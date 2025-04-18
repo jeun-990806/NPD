@@ -3,7 +3,7 @@
 
 ## Building
 Before building this project, the following software must be installed on your system:
-- UPMEM SDK
+- [UPMEM SDK](https://sdk.upmem.com/)
 - `cmake`, `make`
 - GCC compiler
 
@@ -56,7 +56,7 @@ The LR dataset consists of 2,500 randomly selected images from [ILSVRC2012](http
   <img src="images/evaluation_comparison2.png" style="width: 49%; display: inline-block;">
 </p>
 
-We compare NPD with an existing PIM-based JPEG decoder. Execution time is reduced in all cases, with a particularly significant reduction observed when decoding a large number of small images.
+We compare NPD with an existing PIM-based JPEG decoder, [PIM-JPEG](https://github.com/UBC-ECE-Sasha/PIM-JPEG/). Execution time is reduced in all cases, with a particularly significant reduction observed when decoding a large number of small images.
 
 <img src="images/evaluation_comparison3.png" style="width: 60%">
 
