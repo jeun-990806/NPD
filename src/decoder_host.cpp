@@ -157,7 +157,7 @@ void offloading(){
     struct timespec execution_start, execution_end;
     struct timespec tmp_start, tmp_end;
 
-    std::vector<char> write_buffer;
+    // std::vector<char> write_buffer;
 
     clock_gettime(CLOCK_MONOTONIC, &execution_start);
     pim.load(DPU_BINARY);
@@ -205,7 +205,8 @@ void offloading(){
         for(int i=0; i<batch.filenames.size(); i++){
             const std::size_t pos = batch.filenames[i].find_last_of('.');
             nr_allocated_dpus = batch.nr_allocated_dpus[i];
-            write_BMP(batch.metadata[dpu_offset], batch.mcus, dpu_offset, (pos == std::string::npos) ? (batch.filenames[i] + ".bmp") : (batch.filenames[i].substr(0, pos) + ".bmp"), write_buffer);
+            // write_BMP(batch.metadata[dpu_offset], batch.mcus, dpu_offset, (pos == std::string::npos) ? (batch.filenames[i] + ".bmp") : (batch.filenames[i].substr(0, pos) + ".bmp"), write_buffer);
+            write_BMP_fast(batch.metadata[dpu_offset], batch.mcus, dpu_offset, (pos == std::string::npos) ? (batch.filenames[i] + ".bmp") : (batch.filenames[i].substr(0, pos) + ".bmp"));
             dpu_offset += nr_allocated_dpus;
         }
         clock_gettime(CLOCK_MONOTONIC, &tmp_end);
